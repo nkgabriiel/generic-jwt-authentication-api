@@ -7,6 +7,8 @@ import com.springboot.comercio.exception.ClienteNotFoundException;
 import com.springboot.comercio.model.Cliente;
 import com.springboot.comercio.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,6 +61,10 @@ public class ClienteService {
         Cliente clienteEditado = repository.save(cliente);
         return toResponse(clienteEditado);
 
+    }
+
+    public Page<ClienteResponseDTO> listarPaginado(Pageable pageable) {
+        return repository.findAll(pageable).map(this::toResponse);
     }
 
     private ClienteResponseDTO toResponse(Cliente cliente) {

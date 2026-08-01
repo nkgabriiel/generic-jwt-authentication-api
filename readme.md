@@ -9,7 +9,7 @@ Este projeto foi construído com foco na aplicação de padrões profissionais d
 
 ---
 
-# 🎯 Funcionalidades
+#  Funcionalidades
 
 - ✅ CRUD completo de clientes.
 - ✅ Validação de dados utilizando Bean Validation.
@@ -20,7 +20,7 @@ Este projeto foi construído com foco na aplicação de padrões profissionais d
 
 ---
 
-# 🚀 Como Executar
+#  Como Executar
 
 ## Pré-requisitos
 
