@@ -17,6 +17,7 @@ Este projeto foi construído com foco na aplicação de padrões profissionais d
 - ✅ Tratamento global de exceções seguindo o padrão RFC 7807.
 - ✅ Arquitetura em camadas.
 - ✅ DTOs para comunicação entre API e cliente.
+- ✅ Paginação e ordenação de resultados
 
 ---
 
