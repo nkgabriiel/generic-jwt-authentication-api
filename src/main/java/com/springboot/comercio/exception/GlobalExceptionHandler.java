@@ -38,6 +38,7 @@ public class GlobalExceptionHandler extends RuntimeException {
                 .map(f -> f.getField() + ": " + f.getDefaultMessage())
                 .toList();
 
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
                 "timestamp", LocalDateTime.now().toString(),
                 "status", 400,
@@ -52,6 +53,7 @@ public class GlobalExceptionHandler extends RuntimeException {
     public ResponseEntity<Map<String, Object>> handleGeneric(
             Exception ex,
             HttpServletRequest request) {
+
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                 "timestamp", LocalDateTime.now().toString(),
