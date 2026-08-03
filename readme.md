@@ -214,3 +214,9 @@ src
 │       └── ...
 └── test
 ```
+## Documentação
+
+Após executar o projeto, acesse:
+```
+http://localhost:8080/swagger-ui/index.html
+```
