@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler extends RuntimeException {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(ClienteNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleNotFound(
