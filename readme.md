@@ -3,7 +3,7 @@
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.0+-brightgreen.svg)](https://spring.io/projects/spring-boot)
 
-Uma API RESTful para gerenciamento centralizado de comércio eletrônico, desenvolvida com **Java 21** e **Spring Boot 3**.
+Uma API RESTful genérica de autenticação, criada para treinar e aplicar conceitos estudados, desenvolvida com **Java 21** e **Spring Boot 3**.
 
 Este projeto foi construído com foco na aplicação de padrões profissionais de arquitetura de software, incluindo **Design Patterns (DTOs, Builder)**, **Tratamento Global de Exceções (`@ControllerAdvice`)**, validação de dados e separação clara de responsabilidades seguindo princípios de **Clean Architecture**.
 
