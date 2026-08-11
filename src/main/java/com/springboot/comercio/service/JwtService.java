@@ -4,6 +4,7 @@ package com.springboot.comercio.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,14 @@ public class JwtService {
 
     @Value("${jwt.expiration}")
     private Long expiration;
+
+    @PostConstruct
+    private void validarSecret() {
+        if(secret == null || secret.getBytes(StandardCharsets.UTF_8).length < 32) {
+            throw new IllegalStateException("jwt.secret precisa ter pelo menos 32 bytes. "
+                    + "Configure a variável JWT_SECRET com um valor mais longo.");
+        }
+    }
 
     public String gerarToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
