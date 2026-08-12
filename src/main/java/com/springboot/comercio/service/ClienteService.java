@@ -4,6 +4,7 @@ import com.springboot.comercio.dto.request.ClienteRequestDTO;
 import com.springboot.comercio.dto.request.ClienteUpdateDTO;
 import com.springboot.comercio.dto.response.ClienteResponseDTO;
 import com.springboot.comercio.exception.ClienteNotFoundException;
+import com.springboot.comercio.exception.InvalidUserRequestData;
 import com.springboot.comercio.model.Cliente;
 import com.springboot.comercio.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,14 @@ public class ClienteService {
     private final ClienteRepository repository;
 
     public ClienteResponseDTO salvar(ClienteRequestDTO dto) {
+        if(repository.existsByCpf(dto.cpf())) {
+            throw new InvalidUserRequestData("Já existe um usuário cadastrado com esse CPF");
+        }
+
+        if(repository.existsByEmail(dto.email())) {
+            throw new InvalidUserRequestData("Já existe um usuário cadastrado com esse email");
+        }
+
         Cliente cliente = new Cliente();
         cliente.setNome(dto.nome());
         cliente.setCpf(dto.cpf());
@@ -32,7 +41,7 @@ public class ClienteService {
 
     public ClienteResponseDTO buscarPorId(Long id) {
         Cliente cliente = repository.findById(id)
-                .orElseThrow(() -> new ClienteNotFoundException(id));
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado"));
         return toResponse(cliente);
     }
 
@@ -42,14 +51,18 @@ public class ClienteService {
 
     public void deletar(Long id) {
         if(!repository.existsById(id)) {
-            throw new ClienteNotFoundException(id);
+            throw new ClienteNotFoundException("Cliente não encontrado.");
         }
         repository.deleteById(id);
     }
 
     public ClienteResponseDTO editar(ClienteUpdateDTO dto, Long id) {
         Cliente cliente = repository.findById(id)
-                .orElseThrow(() -> new ClienteNotFoundException(id));
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado"));
+
+        if(dto.email() != null && !dto.email().equals(cliente.getEmail()) && repository.existsByEmail(dto.email())) {
+            throw new InvalidUserRequestData("Já existe um usuário cadastrado com esse email.");
+        }
 
         if (dto.nome() != null) {
             cliente.setNome(dto.nome());
