@@ -1,7 +1,9 @@
 package com.springboot.comercio.service;
 
 
+import com.springboot.comercio.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -69,12 +71,16 @@ public class JwtService {
         return resolver.apply(claims);
     }
 
-    private Claims extrairTodosClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getSecretKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+    private Claims extrairTodosClaims(String token) throws InvalidTokenException {
+        try {
+            return Jwts.parser()
+                    .verifyWith(getSecretKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (JwtException e) {
+            throw new InvalidTokenException("Token JWT inválido ou expirado", e);
+        }
     }
 
     private SecretKey getSecretKey() {
