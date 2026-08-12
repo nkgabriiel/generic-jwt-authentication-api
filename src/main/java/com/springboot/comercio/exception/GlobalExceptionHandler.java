@@ -2,6 +2,7 @@ package com.springboot.comercio.exception;
 
 import com.springboot.comercio.dto.response.ErrorResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -52,6 +53,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleConflict(InvalidUserRequestData ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponseDTO.of(HttpStatus.CONFLICT, ex.getMessage(), request.getRequestURI()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ErrorResponseDTO.of(HttpStatus.CONFLICT, "Conflito de dados: um registro com esses valores já existe.", request.getRequestURI()));
     }
 
     @ExceptionHandler(Exception.class)
