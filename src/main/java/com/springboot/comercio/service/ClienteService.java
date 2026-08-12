@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class ClienteService {
 
     private final ClienteRepository repository;
 
+    @Transactional
     public ClienteResponseDTO salvar(ClienteRequestDTO dto) {
         if(repository.existsByCpf(dto.cpf())) {
             throw new InvalidUserRequestData("Já existe um usuário cadastrado com esse CPF");
@@ -39,16 +41,19 @@ public class ClienteService {
         return toResponse(salvo);
     }
 
+    @Transactional(readOnly = true)
     public ClienteResponseDTO buscarPorId(Long id) {
         Cliente cliente = repository.findById(id)
                 .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado"));
         return toResponse(cliente);
     }
 
+    @Transactional(readOnly = true)
     public List<ClienteResponseDTO> listarTodos() {
         return repository.findAll().stream().map(this::toResponse).toList();
     }
 
+    @Transactional
     public void deletar(Long id) {
         if(!repository.existsById(id)) {
             throw new ClienteNotFoundException("Cliente não encontrado.");
@@ -56,6 +61,7 @@ public class ClienteService {
         repository.deleteById(id);
     }
 
+    @Transactional
     public ClienteResponseDTO editar(ClienteUpdateDTO dto, Long id) {
         Cliente cliente = repository.findById(id)
                 .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado"));
@@ -76,6 +82,7 @@ public class ClienteService {
 
     }
 
+    @Transactional(readOnly = true)
     public Page<ClienteResponseDTO> listarPaginado(Pageable pageable) {
         return repository.findAll(pageable).map(this::toResponse);
     }
