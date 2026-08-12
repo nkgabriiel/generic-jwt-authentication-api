@@ -1,12 +1,16 @@
 package com.springboot.comercio.config;
 
+import com.springboot.comercio.dto.response.ErrorResponseDTO;
 import com.springboot.comercio.filter.JwtFilter;
 import com.springboot.comercio.service.UsuarioDetailsService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +21,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import tools.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +33,7 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
     private final UsuarioDetailsService usuarioDetailsService;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,11 +43,10 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.setContentType("application/json;charset=UTF-8");
-                            response.getWriter().write(
-                                    "{\"status\":401,\"erro\":\"Não autenticado\",\"mensagem\":\"Token ausente ou inválido\"}"
-                            );
+                           formatarErro(request, response, HttpStatus.UNAUTHORIZED, "Token inválido ou ausente");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            formatarErro(request, response, HttpStatus.FORBIDDEN, "Acesso restrito");
                         })
                 )
                 .authorizeHttpRequests(auth -> auth
@@ -68,5 +76,15 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private void formatarErro(HttpServletRequest request, HttpServletResponse response, HttpStatus status, String mensagem) throws IOException {
+            ErrorResponseDTO erroResponse = ErrorResponseDTO.of(status, mensagem, request.getRequestURI());
+
+            response.setStatus(status.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding(StandardCharsets.UTF_8);
+
+        objectMapper.writeValue(response.getOutputStream(), erroResponse);
     }
 }
