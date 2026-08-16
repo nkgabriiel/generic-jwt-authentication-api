@@ -3,6 +3,7 @@ package com.springboot.comercio.service;
 import com.springboot.comercio.dto.request.LoginRequestDTO;
 import com.springboot.comercio.dto.request.RegisterRequestDTO;
 import com.springboot.comercio.dto.response.TokenResponseDTO;
+import com.springboot.comercio.dto.response.UsuarioResponseDTO;
 import com.springboot.comercio.exception.InvalidUserRequestData;
 import com.springboot.comercio.model.Role;
 import com.springboot.comercio.model.Usuario;
@@ -60,5 +61,12 @@ public class AuthService {
                 novoUsuario.getEmail(),
                 novoUsuario.getRole().name()
         );
+    }
+
+    public UsuarioResponseDTO me(Usuario usuario) {
+            return new UsuarioResponseDTO(
+                    usuario.getEmail(),
+                    usuario.getRole().name()
+            );
     }
 }
