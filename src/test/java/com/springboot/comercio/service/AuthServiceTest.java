@@ -4,7 +4,7 @@ import com.springboot.comercio.dto.request.LoginRequestDTO;
 import com.springboot.comercio.dto.response.TokenResponseDTO;
 import com.springboot.comercio.model.Role;
 import com.springboot.comercio.model.Usuario;
-import org.junit.jupiter.api.BeforeEach;
+import com.springboot.comercio.repository.TokenRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,6 +32,9 @@ public class AuthServiceTest {
 
     @Mock
     private Authentication authentication;
+
+    @Mock
+    private TokenRepository tokenRepository;
 
     @InjectMocks
     private AuthService authService;
