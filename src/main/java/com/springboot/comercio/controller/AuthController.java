@@ -51,4 +51,10 @@ public class AuthController {
     public ResponseEntity<TokenResponseDTO> refresh(@RequestBody @Valid RefreshRequestDTO dto) {
         return ResponseEntity.ok(service.refresh(dto));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody @Valid RefreshRequestDTO dto) {
+        service.logout(dto);
+        return ResponseEntity.noContent().build();
+    }
 }

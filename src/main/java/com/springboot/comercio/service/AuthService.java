@@ -114,4 +114,10 @@ public class AuthService {
                     usuario.getRole().name()
             );
     }
+
+    @Transactional
+    public void logout(RefreshRequestDTO dto) {
+        tokenRepository.findByToken(dto.refreshToken())
+                .ifPresent(refreshToken -> refreshToken.setRevogado(true));
+    }
 }
