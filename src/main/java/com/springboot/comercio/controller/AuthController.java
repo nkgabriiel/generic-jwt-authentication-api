@@ -1,6 +1,7 @@
 package com.springboot.comercio.controller;
 
 import com.springboot.comercio.dto.request.LoginRequestDTO;
+import com.springboot.comercio.dto.request.RefreshRequestDTO;
 import com.springboot.comercio.dto.request.RegisterRequestDTO;
 import com.springboot.comercio.dto.response.TokenResponseDTO;
 import com.springboot.comercio.dto.response.UsuarioResponseDTO;
@@ -44,5 +45,10 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<UsuarioResponseDTO> me(@AuthenticationPrincipal Usuario usuario) {
         return ResponseEntity.ok(service.me(usuario));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponseDTO> refresh(@RequestBody @Valid RefreshRequestDTO dto) {
+        return ResponseEntity.ok(service.refresh(dto));
     }
 }
