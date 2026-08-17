@@ -2,6 +2,7 @@ package com.springboot.comercio.config;
 
 import com.springboot.comercio.dto.response.ErrorResponseDTO;
 import com.springboot.comercio.filter.JwtFilter;
+import com.springboot.comercio.filter.RateLimitFilter;
 import com.springboot.comercio.service.UsuarioDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
+    private final RateLimitFilter rateLimitFilter;
     private final UsuarioDetailsService usuarioDetailsService;
     private final ObjectMapper objectMapper;
 
@@ -63,7 +65,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/clientes/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(rateLimitFilter, JwtFilter.class);
 
         return http.build();
     }
