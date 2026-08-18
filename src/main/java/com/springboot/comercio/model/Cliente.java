@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Cliente {
+public class Cliente extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

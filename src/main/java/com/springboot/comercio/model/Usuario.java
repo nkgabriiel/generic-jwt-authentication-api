@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Usuario implements UserDetails {
+public class Usuario extends Auditable implements UserDetails {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)

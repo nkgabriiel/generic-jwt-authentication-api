@@ -1,16 +1,19 @@
 package com.springboot.comercio.repository;
 
+import com.springboot.comercio.config.JpaAuditingConfig;
 import com.springboot.comercio.model.Cliente;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
+@Import(JpaAuditingConfig.class)
 public class ClienteRepositoryTest {
 
     @Autowired
