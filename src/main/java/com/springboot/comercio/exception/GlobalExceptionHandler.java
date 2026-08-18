@@ -20,9 +20,10 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(ClienteNotFoundException.class)
+    @ExceptionHandler({ClienteNotFoundException.class,
+            ProductNotFoundException.class})
     public ResponseEntity<ErrorResponseDTO> handleNotFound(
-            ClienteNotFoundException ex, HttpServletRequest request) {
+            RuntimeException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponseDTO.of(HttpStatus.NOT_FOUND, ex.getMessage(), request.getRequestURI()));
     }
@@ -49,8 +50,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(ErrorResponseDTO.of(HttpStatus.UNAUTHORIZED, ex.getMessage(), request.getRequestURI()));
     }
 
-    @ExceptionHandler (InvalidUserRequestData.class)
-    public ResponseEntity<ErrorResponseDTO> handleConflict(InvalidUserRequestData ex, HttpServletRequest request) {
+    @ExceptionHandler({
+            InvalidUserRequestData.class,
+            InvalidProductRequestData.class})
+    public ResponseEntity<ErrorResponseDTO> handleConflict(RuntimeException ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponseDTO.of(HttpStatus.CONFLICT, ex.getMessage(), request.getRequestURI()));
     }
