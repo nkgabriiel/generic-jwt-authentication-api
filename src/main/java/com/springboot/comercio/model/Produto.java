@@ -28,4 +28,7 @@ public class Produto extends Auditable {
 
     @Column(nullable = false)
     private Integer estoque;
+
+    @Version
+    private Long version;
 }
