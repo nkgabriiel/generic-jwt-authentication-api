@@ -49,6 +49,12 @@ public class ClienteService {
     }
 
     @Transactional(readOnly = true)
+    public Cliente buscarEntidadePorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado"));
+    }
+
+    @Transactional(readOnly = true)
     public List<ClienteResponseDTO> listarTodos() {
         return repository.findAll().stream().map(this::toResponse).toList();
     }
