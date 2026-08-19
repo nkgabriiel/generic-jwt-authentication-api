@@ -3,6 +3,7 @@ package com.springboot.comercio.controller;
 import com.springboot.comercio.dto.request.ClienteRequestDTO;
 import com.springboot.comercio.dto.request.ClienteUpdateDTO;
 import com.springboot.comercio.dto.response.ClienteResponseDTO;
+import com.springboot.comercio.model.Usuario;
 import com.springboot.comercio.service.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -91,6 +93,11 @@ public class ClienteController {
     public ResponseEntity<Page<ClienteResponseDTO>> listarPaginado(
             @PageableDefault(size = 10, sort = "nome") Pageable pageable) {
         return ResponseEntity.ok(service.listarPaginado(pageable));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<ClienteResponseDTO> me(@AuthenticationPrincipal Usuario usuario) {
+        return ResponseEntity.ok(service.me(usuario.getCliente()));
     }
 
 }

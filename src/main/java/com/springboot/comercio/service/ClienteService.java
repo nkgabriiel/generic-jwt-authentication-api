@@ -87,6 +87,19 @@ public class ClienteService {
         return repository.findAll(pageable).map(this::toResponse);
     }
 
+    public ClienteResponseDTO me(Cliente cliente) {
+        if(cliente == null) {
+            throw new ClienteNotFoundException("Nenhum cliente vinculado a esse usuário");
+        }
+        return new ClienteResponseDTO(
+                cliente.getId(),
+                cliente.getNome(),
+                cliente.getCpf(),
+                cliente.getEmail(),
+                cliente.getPontoFidelidade()
+        );
+    }
+
     private ClienteResponseDTO toResponse(Cliente cliente) {
         return new ClienteResponseDTO(
                 cliente.getId(),

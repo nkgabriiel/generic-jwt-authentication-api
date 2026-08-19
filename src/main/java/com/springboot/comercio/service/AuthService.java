@@ -7,9 +7,11 @@ import com.springboot.comercio.dto.response.TokenResponseDTO;
 import com.springboot.comercio.dto.response.UsuarioResponseDTO;
 import com.springboot.comercio.exception.InvalidTokenException;
 import com.springboot.comercio.exception.InvalidUserRequestData;
+import com.springboot.comercio.model.Cliente;
 import com.springboot.comercio.model.RefreshToken;
 import com.springboot.comercio.model.Role;
 import com.springboot.comercio.model.Usuario;
+import com.springboot.comercio.repository.ClienteRepository;
 import com.springboot.comercio.repository.TokenRepository;
 import com.springboot.comercio.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class AuthService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenRepository tokenRepository;
+    private final ClienteRepository clienteRepository;
 
     @Transactional
     public TokenResponseDTO login(LoginRequestDTO dto) {
@@ -64,10 +67,26 @@ public class AuthService {
             throw new InvalidUserRequestData("Esse email já foi cadastrado.");
         }
 
+        if(clienteRepository.existsByCpf(dto.cpf())) {
+            throw new InvalidUserRequestData("Já existe um usuário cadastrado com esse CPF");
+        }
+
+        if(clienteRepository.existsByEmail(dto.email())) {
+            throw new InvalidUserRequestData("Já existe um usuário cadastrado com esse email");
+        }
+
+        Cliente novoCliente = new Cliente();
+        novoCliente.setNome(dto.nome());
+        novoCliente.setCpf(dto.cpf());
+        novoCliente.setEmail(dto.email());
+        novoCliente.setPontoFidelidade(0);
+        clienteRepository.save(novoCliente);
+
         Usuario novoUsuario = new Usuario();
         novoUsuario.setEmail(dto.email());
         novoUsuario.setSenha(passwordEncoder.encode(dto.senha()));
         novoUsuario.setRole(Role.USER);
+        novoUsuario.setCliente(novoCliente);
 
         usuarioRepository.save(novoUsuario);
 

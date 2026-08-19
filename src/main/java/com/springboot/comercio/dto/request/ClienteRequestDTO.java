@@ -2,13 +2,17 @@ package com.springboot.comercio.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record ClienteRequestDTO(
         @NotBlank(message = "Nome é obrigatório")
         String nome,
 
-        @NotBlank(message = "CPF é obrigatório")
+        @NotBlank(message = "O cpf é obrigatório")
+        @Pattern(
+                regexp = "^[0-9]+$",
+                message = "O cpf só deve conter números")
         @Size(min = 11, max = 14, message = "CPF inválido")
         String cpf,
 
